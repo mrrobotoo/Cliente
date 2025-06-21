@@ -1,0 +1,127 @@
+swagger: "2.0"
+info:
+  title: Cliente CRUD API
+  description: API for managing clients with Record and Pattern Matching
+  version: 1.0.0
+host: localhost:8080
+basePath: /api
+schemes:
+  - http
+paths:
+  /clientes:
+    get:
+      summary: Get all clients
+      produces:
+        - application/json
+      responses:
+        200:
+          description: List of clients
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Cliente'
+    post:
+      summary: Create a new client
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: cliente
+          required: true
+          schema:
+            $ref: '#/definitions/Cliente'
+      responses:
+        201:
+          description: Client created
+          schema:
+            $ref: '#/definitions/Cliente'
+  /clientes/{id}:
+    get:
+      summary: Get client by ID
+      produces:
+        - application/json
+      parameters:
+        - name: id
+          in: path
+          required: true
+          type: string
+      responses:
+        200:
+          description: Client found
+          schema:
+            $ref: '#/definitions/Cliente'
+        404:
+          description: Client not found
+    put:
+      summary: Update client
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: id
+          in: path
+          required: true
+          type: string
+        - in: body
+          name: cliente
+          required: true
+          schema:
+            $ref: '#/definitions/Cliente'
+      responses:
+        200:
+          description: Client updated
+          schema:
+            $ref: '#/definitions/Cliente'
+        404:
+          description: Client not found
+    delete:
+      summary: Delete client
+      parameters:
+        - name: id
+          in: path
+          required: true
+          type: string
+      responses:
+        204:
+          description: Client deleted
+        404:
+          description: Client not found
+  /clientes/{id}/descuento:
+    get:
+      summary: Calculate discount based on client type
+      produces:
+        - application/json
+      parameters:
+        - name: id
+          in: path
+          required: true
+          type: string
+      responses:
+        200:
+          description: Discount calculated
+          schema:
+            type: object
+            properties:
+              descuento:
+                type: number
+                format: double
+        404:
+          description: Client not found
+definitions:
+  Cliente:
+    type: object
+    properties:
+      id:
+        type: string
+      nombre:
+        type: string
+      email:
+        type: string
+      edad:
+        type: integer
+      tipoCliente:
+        type: string
+        enum: [REGULAR, VIP]
